@@ -3,10 +3,13 @@ import os
 
 np.random.seed(2020) # to ensure you always get the same train/test split
 
-data_path = '../data/RedLights2011_Medium'
-gts_path = '../data/hw02_annotations'
-split_path = '../data/hw02_splits'
+data_path = '/home/tarun/Downloads/caltech-ee148-hw-data/hw2/RedLights2011_Medium'
+gts_path = '/home/tarun/Downloads/caltech-ee148-hw-data/hw2/hw02_annotations'
+split_path = '/home/tarun/Downloads/caltech-ee148-hw-data/hw2/hw02_splits'
+preds_path = '/home/tarun/Downloads/caltech-ee148-hw-data/hw2/hw02_preds'
 os.makedirs(preds_path, exist_ok=True) # create directory if needed
+os.makedirs(split_path, exist_ok=True) # create directory if needed
+os.makedirs(gts_path, exist_ok=True) # create directory if needed
 
 split_test = False # set to True and run when annotations are available
 
@@ -24,6 +27,22 @@ file_names_test = []
 '''
 Your code below. 
 '''
+
+indices = np.arange(len(file_names))
+
+# randomly shuffle and then use the first 85% for train and last 85% for test
+np.random.shuffle(indices)
+training_indices = indices[0:int(train_frac*len(file_names))]
+testing_indices = indices[int(train_frac*len(file_names))::]
+
+for i in training_indices:
+    file_names_train.append(file_names[i])
+
+for i in testing_indices:
+    file_names_test.append(file_names[i])
+
+
+
 
 assert (len(file_names_train) + len(file_names_test)) == len(file_names)
 assert len(np.intersect1d(file_names_train,file_names_test)) == 0
